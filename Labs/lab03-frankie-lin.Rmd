@@ -1,0 +1,131 @@
+---
+title: "Lab 3"
+author: "Frankie Lin"
+date: "2/14/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Basic Importing
+```{r}
+setwd('/Users/Frankie/Documents/School/Stat 133/Labs')
+
+#reading data fom local directory
+abalone <- read.table("abalone.data", sep = ",")
+
+# take a peek of first rows
+head(abalone)
+
+# take a peek of last rows
+tail(abalone)
+
+#renaming columns
+column_names <- c("Sex", "Length", "Diameter", "Height", "Whole", "Shucked", "Viscera", "Shell", "Rings")
+
+#Denoting the column types
+column_types <- c("factor", "real", "real", "real", "real", "real", "real", "real", "integer")
+
+#Reloading abalone
+abalone <- read.table("abalone.data", sep = ",", col.names = column_names, colClasses = column_types)
+
+#Checking structure of the reloaded data
+str(abalone, vec.len = 1)
+
+#Abalone 2
+abalone2 <- read.csv("abalone.data", header = FALSE)
+str(abalone2)
+
+#How would you read just the first 10 lines in abalone.data? Name this data as abalone10, and check its structure with str().
+abalone_10 <- head(read.csv("abalone.data", header = FALSE), 10)
+str(abalone_10)
+
+#How would you skip the first 10 lines in abalone.data, in order to read the next 10 lines (lines 11-20)? Name this data as abalone20, and check its structure with str().
+abalone_20 <- read.csv("abalone.data", header = FALSE)[c(11:20),]
+str(abalone_20)
+
+#Null removes the column if passed thorugh colClasses
+
+#just tesiting a bunch of things
+str(abalone)
+summary(abalone)
+dim(abalone)
+names(abalone)
+colnames(abalone)
+nrow(abalone)
+ncol(abalone)
+
+#making the smaller summary table 
+summary(abalone[,2:ncol(abalone)])
+```
+
+#Filtering, Slicing, and Selecting
+```{r}
+#slice the data by selecting the first 5 rows
+head(abalone, 5)
+
+#slice the data by selecting rows 5, 10, 15, 20, 25, …, 50.
+abalone[seq(5, 50, 5),]
+
+#slice the data by selecting the last 5 rows; try doing this without using tail(), and without hard coding the numbers of the last five rows.
+abalone[seq(nrow(abalone) - 4, nrow(abalone), 1), ]
+
+#create a data frame height14 by filtering the data with those abalones with Height less than 0.14, and display its dimensions with dim()
+dim(height14 <- abalone[abalone$Height < 0.14, ])
+
+#create a data frame infant by filtering the data about Infant abalones, and display its dimensions with dim()
+dim(infant <- abalone[abalone$Sex == "I",])
+
+#create a data frame male_female by filtering the data with Male and Female abalones, and display its dimensions with dim()
+dim(infant <- abalone[abalone$Sex != "I",])
+
+#filter the data with those abalones with more than 25 Rings, displaying only their Sex, and Rings.
+abalone[abalone$Rings > 25, c("Sex", "Rings")]
+
+#filter the data with those infant abalones with more than 3 Rings and less than 6, displaying only their Sex, Rings, and Diameter.
+
+head(abalone[abalone$Rings > 3 & abalone$Rings < 6 & abalone$Sex == "I" , c("Sex", "Rings", "Diameter")])
+```
+
+#Adding new variables and Sorting Rows
+```{r}
+abies <- abalone[abalone$Sex == 'I', c('Length', 'Height', 'Diameter')]
+
+abies$Ht_Len <- abies$Height / abies$Length
+
+abies2 <- abies[order(abies$Length, decreasing = TRUE), ]
+
+#using the data frame abies, add a new variable product with the product of Whole and Shucked.
+abies$product <- (abalone[abalone$Sex == "I", ]$Whole * abalone[abalone$Sex == "I", ]$Shucked)
+
+#create a new data frame abies3, by adding columns log_height and log_length with the log transformations of height and length.
+abies3 <- abies
+abies3$log_length <- log(abies3$Length)
+abies3$log_height <- log(abies3$Height)
+
+#use the original data frame abalone to filter and arrange those abalones with height less than 0.12, in increasing order.
+head(abalone[abalone$Height < 0.12, ][order(abalone[abalone$Height < 0.12, ]$Height), ])
+
+#display a data frame with the Sex, Diameter, and Rings, of the top-5 highest abalones
+head(abalone[order(abalone$Height, decreasing = TRUE), c("Sex", "Diameter", "Rings")])
+
+#display a data frame with the Sex, Diameter, and Rings, of the top-5 longest abalones
+head(abalone[order(abalone$Length, decreasing = TRUE), c("Sex", "Diameter", "Rings")])
+```
+
+#Plotting
+```{r}
+plot(abalone$Sex, abalone$Length)
+
+plot(abalone$Diameter, abalone$Rings, 
+     xlab = "Diameter",
+     ylab = "Rings", 
+     main = "Rings by Diameter Abalone Plot", 
+     sub = "Wow so cool")
+```
+
+
+
+

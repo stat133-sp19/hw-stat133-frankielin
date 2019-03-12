@@ -1,0 +1,268 @@
+---
+title: "Warmup 2"
+author: "Frankie Lin"
+date: "2/9/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##1) Vectors
+```{r}
+number <- c(30, 35, 23, 9, 11, 27, 34, 6, 3, 0)
+player <-
+c(
+"Stephen Curry",
+"Kevin Durant",
+"Draymond Green",
+"Andre Iguuodala",
+"Klay Thompson",
+"Zaza Pachulia",
+"Shaun Livingston",
+"Nick Young",
+"David West",
+"Patrick McCaw"
+)
+position <-
+as.factor(c("PG", "PF", "PF", "SF", "SG", "C", "PG", "SG", "C", "SG"))
+height <-
+c("6-3",
+"6-9",
+"6-7",
+"6-6",
+"6-7",
+"6-11",
+"6-7",
+"6-7",
+"6-9",
+"6-7")
+weight <- c(190, 240, 230, 215, 215, 270, 192, 210, 250, 185)
+birthdate <-
+c(
+"March 14, 1988",
+"September 29, 1988",
+"March 4, 1990",
+"January 28, 1984",
+"February 8, 1990",
+"February 10, 1984",
+"September 11, 1985",
+"June 1, 1985",
+"August 29, 1980",
+"October 25, 1995"
+)
+experience <- c(8, 10, 5, 13, 6, 14, 12, 10, 14, 1)
+college <-
+c(
+"Davidson College",
+"University of Texas at Austin",
+"Michigan State University",
+"University of Arizona",
+"Washington State University",
+NA,
+NA,
+"University of Southern California",
+"Xavier University",
+"University of Nevada, Las Vegas"
+)
+
+#What is the name of the heaviest player?
+player[weight == max(weight)]
+
+#What is the college of the player that has a height of 6-6?
+college[height == "6-6"]
+
+#What is the position of the player the most years of experience?
+position[experience == max(experience)]
+
+#What is the number of the lightest player?
+number[weight == min(weight)]
+
+#Obtain frequencies (counts) of the position values.
+table(position)
+
+#How many players have a weight larger than the average (i.e. mean) weight?
+sum(weight > mean(weight))
+
+#How many players have between 9 and 12 years of experience (inclusive)?
+sum(experience >= 9 & experience <= 12)
+
+#What is the mean years of experience of Shooting Guard (SG) players?
+mean(experience[position == "SG"])
+
+#What is the median weight of those players with a position different of Center (C)?
+median(weight[position != "C"])
+
+#What is the first quartile (i.e. bottom 25th percentile) of years of experience among
+#Power Forwards (PF) and Shooting Guards (SG)
+quantile(experience[position == "PF" | position == "SG"])[2]
+```
+
+##2) List for GSW
+```{r}
+gsw <- list(
+  player = player,
+  number = number,
+  position = position,
+  weight = weight,
+  experience = experience
+  )
+  
+  #a) What is the number of the heaviest player?
+  gsw$number[which.max(gsw$weight)]
+  
+  #b) What is the position of the player with less experience?
+  gsw$position[which.min(gsw$experience)]
+  
+  #c) How many players have less than 8 or more than 11 years of experience?
+  sum(gsw$experience > 11 & gsw$experience < 8)
+  
+  #d) What is the third quartile (i.e. bottom 75th percentile) of years of experience among Power Forwards (PF) and Shooting Guards (SG)
+  quantile(gsw$experience[gsw$position == "PF" |
+  gsw$position == "SG"])[4]
+  
+  #e) What is the name of the player whose weight is furthest from the average weight (of all players)?
+  gsw$player[which.max(abs(gsw$weight - mean(gsw$weight)))]
+
+```
+
+##3) More Lists
+```{r}
+hp <- list(
+first = 'Harry',
+last = 'Potter',
+courses = c('Potions', 'Enchantments', 'Spells'), sport = 'quidditch',
+age = 18L,
+gpa = 3.9
+)
+
+#a) What is the class of hp?
+class(hp)
+
+#b) How many elements are in hp?
+length(hp)
+
+#c) What is the length of courses?
+length(hp$courses)
+
+#d) What is the data type of the element age? 
+typeof(hp$age)
+
+#e) What is the data type of the element gpa?
+typeof(hp$gpa)
+
+#f) If you combine age and gpa in a new vector, what is the data type of this vector?
+new_vec <- c(hp$age,hp$gpa)
+typeof(new_vec)
+
+```
+
+##)4
+a) $1 + TRUE$ is equivalent to 1 becasue the TRUE Boolean is coded as 1 in R. In other words, if I mutlpied a number to FALSE, it would be equivalent to that number. When you use FALSE, on the other hand, it is coded as 0. This we can see when we add them together it is equivalent to 2.
+
+b) We see that the character of "-2" can used in a logical. and since -2 is less than 0, we can see that the R output would result in a FALSE boolean as the statement is not true. This is an example of an implicit coercien. 
+
+c) We see this case just the same as the first problem. We know that FALSE is coded as 0 in R. thus we see that 0 is indeed greater than or equal to 0. Thus we are able to see how booleans work in R. 
+
+d) When you place a !TRUE in from of the command, you basically are telling the command to exceture the boolean first. In this case, it makes it spit out the output of false bcasue that's what we also of it in command of B. On the other hand, command A adds 1 first before asking whats the opposite of TRUE. Command B says for you to find the opposite of TRUE first and thus it only returns that. In a way it's like we are trying to run the function first and thus it results in the FALSE in command B. 
+
+##5)Subsetting
+####Data
+```{r}
+lord <- c('v', 'o', 'l', 'd', 'e', 'm', 'o', 'r', 't')
+```
+
+a)
+```{r}
+lord[TRUE]
+```
+When we use true in this case, we simple are asking for all the charaters in the vector. By passing the TRUE in we select all elements in the vector. We simply extract the vector out again. This is due to the fact that we haven't forcefully coerced TRUE into a value. 
+
+```{r}
+lord[length(lord) + 1]
+```
+Here we are selecting the length(lord) + 1 index of the vector lord. Since we do not have 10th element, we see that the output is NA. We see here we are trying to pull a character that does not exist. 
+
+```{r}
+lord[seq(from = length(lord), to = 1, by = -2)]
+```
+Here we are selecting every two starting from the back. Thus this leads to the 5 leters that are shown. This is a subset of the data. 
+
+
+```{r}
+lord[lord == "o"]
+```
+Here we simply select all the letters that are "o". We then subset the data. 
+
+```{r}
+lord[lord != "e" & lord != "o"]
+```
+In this case, we subset the data where the values are not e or o. This is very simiilar to the one above except we choose to exclude certain varaibles instead of including. 
+
+
+```{r}
+lord[lord %in% c('a', 'e', 'i', 'o', 'u')]
+```
+Loigically, this is subsetting the lord vector for the indicies that contain a vowel. We see that we first check if each of the indicies in lord is a vowl then we extract them via a subset. 
+
+
+```{r}
+toupper(lord[!(lord %in% c('a', 'e', 'i', 'o', 'u'))])
+```
+The logic with this lines is almost exactly the same as the one before except not ony do we wrap the vector in a fucntion, but we extract all elements that are not a vowel. In this case, after we subset the data for all characters that aren'l vowels, we use the toupper function which converts them from lowercase to uppercase letters.
+
+```{r}
+paste(lord, collapse = '')
+```
+Here we see the funciton paste, in which we would pase the vector. However in this case, we additional use something called collapse where we collapse the vector into one character (due to the fact that the original vector contained characters). 
+
+```{r}
+lord[is.na(lord)]
+```
+We see there that we are apptemtping to subset the characters that are NA in the vector lord. In this case, we note that there are no such cases and thus the subset retuns character(0). This shows that we can attempt to subset, but 
+
+```{r}
+sum(!is.na(lord))
+```
+In this case, we are utilizing the coercion pricipals within a vector. That is when we use the !is.na function we attempt to find all of the values that are not NA in the vector. Then we wrap the vector with a fucntion which is sum that implicitly coercies the vector in which the trues are converted into 1's and added together. We see there that the sum is simply the count of the vectors. 
+
+##6) 2D Arrays
+```{r}
+(lord_mat <- matrix(lord, nrow = 3, ncol = 3))
+```
+
+a)
+```{r}
+lord_mat[, 1]
+```
+
+b)
+```{r}
+lord_mat[2:1, 2:1]
+```
+
+c)
+```{r}
+lord_mat[3:1, ]
+```
+
+d)
+```{r}
+lord_mat[, c(1, 2, 2)]
+```
+
+e)
+```{r}
+lord_mat[3:1, 3:1]
+```
+
+f)
+```{r}
+lord_mat[c(3, 2, 1, 1, 2, 3), c(3, 2, 2, 3)]
+```
+g)
+```{r}
+lord_mat[c(3,2,1,1,2,3), c(1,2,3,3,2,1)]
+```
+

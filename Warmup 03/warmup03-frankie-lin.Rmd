@@ -1,0 +1,224 @@
+---
+title: "Warm Up 3"
+author: "Frankie Lin"
+date: "2/15/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+setwd('/Users/Frankie/Documents/School/Stat 133/Warmup 03')
+
+# assembling url so it fits on the screen
+github <- 'https://raw.githubusercontent.com/ucb-stat133/stat133-hws/'
+repo <- 'master/data/nba2018-players.csv'
+datafile <- paste0(github, repo)
+```
+
+#Importing Data
+###a)
+```{r}
+classes <- c("character", "factor", "factor", "integer", "integer", "integer", "integer", "character", "real", "integer", "integer", "integer", "integer", "integer", "integer")
+```
+
+
+###b)
+```{r}
+nba <- read.csv(datafile, colClasses = classes)
+str(nba, vec.len = 1)
+```
+
+###c)
+```{r}
+nba2 <- read.table(datafile, sep = ",", header = TRUE, colClasses = classes)
+str(nba2, vec.len = 1)
+```
+
+###d)
+```{r}
+identical(nba, nba2)
+```
+
+#2) Technical Questions about importing data
+
+a) When we reead the csv file with the specificaltion above, the columns are listed as "V1", "V2", etc. to represent each variable. That is, since we didn;t pass a header through the read.csv funciton, it must creat its own header and R has a standardized way of doing that. It names each of the columns "V1", "V2", etc for each of the columns. 
+
+b) In this case, each of the variables is then coded as a factor. This is because we mix both numbers and letters into each of the cloumns and R will then default to all the variables as factors. 
+
+c) We fail to load the document in this case because the sep default in read.table is "". in our data, this is not the case as all the data is seperated via commas and thus we fail to read the data. 
+
+d) In this case, we reduced the number of factors when we induced the certain classes to the data frame. When we reduce the number of clases, we tend to reduce the amount of data that the datta frame takes up as it no longer needs to record the levels for the factors. In this case the data frame that we defined with out own classes is the samller data frame with the reasoning stated above. 
+
+e) When we induce an as.matrix function onto the data frame, we force the data frame to no longer be a an non-atomic structure, but instead an atomic one. In this case, we see that all the values of the data frame have been coerced into a character. 
+
+#3) Examine Salary
+
+###a) 
+```{r}
+summary(nba$salary)
+```
+
+###b)
+```{r}
+hist(nba$salary)
+```
+
+###c)
+```{r}
+nba$salary2 <- nba$salary/1000000
+hist(nba$salary2)
+```
+
+###d)
+```{r}
+hist(log(nba$salary2))
+```
+
+We see that when log the salary information, we see that the distribution of that data is approximately normal. We see a single peak that seems to taper off on both sides of the distribution, though rather quickly from the right and slowly on the left. This tells us that our data is skew left. Other than that, we observe that the data is approximately normal and thus is actaully a great transformation if we wish to explore and use parametric techniques on it such as the T-test. 
+
+###e)
+```{r}
+low <- (log(nba$salary2) < (-3))
+print(paste("The number of players with -3 log salary is", sum(low)))
+```
+
+###f)
+```{r}
+nba[low,  c('player', 'weight', 'height', 'team', 'position')]
+```
+
+###g)
+```{r}
+nba <- nba[!low,]
+dim(nba)
+```
+
+#4) Explore Points
+
+###a)
+```{r}
+summary(nba$points)
+hist(nba$points)
+```
+
+###b)
+```{r}
+nba$points[nba$points == 1] <- (nba$points[nba$points == 1] + 0.1)
+
+hist(log(nba$points))
+```
+
+We observe that when we utilize the logirithmic funciton on our data, we end up seeing that the data is pretty left skew. We see that this data does not fit the normal distribution as well as wel like as the left skew is more extreme than that of the logorithmic salary. We also note that after the peak of data the right side drops off in a pretty extreme degree. This makes me question our ability to assume a parametric model for our data. That is to say, if we were to use a linear regression thorugh the data or any sort of t-test, it would be hard to convince due to not only a lack of data, but the fact that the data is skewed may mean that our errors are not robust. 
+
+#5) Transforming Age into a Factor
+
+###a)
+```{r}
+boxplot(salary2 ~ age, data = nba,
+xlab = "Age", ylab = "Salary (in millions)")
+
+```
+
+There does seem to ge a rather interesting trend going on with the data regarding salaries and the age of players. We see that as players get older, there seems to be a wider varience in the data. That is, we see thawhen players hit around 24, the salaries for a players to vary greatly. this also helps to push the median and mean salary of prime age. In this case, we see that players that are above the age of 24 and below the age of about 33 seem to make the most of the money. This seems to be the age at which players are at thier prime and thus hold the most value. 
+
+###b)
+```{r}
+boxplot(points ~ age, data = nba,
+xlab = "Age", ylab = "Points Score (in a season)")
+```
+
+Interestingly enough, when we take a look at points, we see that the points scored don't seem to differ by very much thoughout the year. We see some areas where the median points scored is lower from different years, but none seem to point significantly towards any direction that would make us assume that there is a significant difference with the number of points score relative to the age of the player. We can confirm this with a standard ANOVA but given that that is probably beyond the scope of the course as well as we have done no assumptions regarding varience or parametric distribution it may not be proper. However, from the simple eye test, it does not seem that age correlates very much with poitns scores, though there are hints that the varience of points scored does seem to peak towards those prime years mentioned above. 
+
+###c)
+```{r}
+age2 <- nba$age
+age2[age2 < 20] <- 20
+age2 <- cut(age2, breaks = c(19 , 24 , 29, 100), labels = c("20-24", "25-29", "30+"))
+
+summary(age2)
+```
+
+#6) Plotting Salary against Points, by Age Group
+
+###a)
+```{r}
+palette1 <- c("#D4D62A", "#4F9D66", "#9575AB")
+```
+
+###b)
+```{r}
+age_colors <- c()
+age_colors[age2 == '20-24'] <- palette1[1]
+age_colors[age2 == "25-29"] <- palette1[2]
+age_colors[age2 == "30+"] <- palette1[3]
+
+age_colors
+```
+
+###c)
+```{r}
+plot(salary ~ points, data = nba, log = "xy", main = "",
+xlab = "Points (log scale)", ylab = "Salary (log $)",
+col = age_colors, pch = 19, cex = 0.6)
+legend("bottomright", fill = palette1, legend = levels(age2),
+title = "Age Groups", cex = 0.8)
+```
+
+#7) Plotting Salary against Points, by Position
+
+###a)
+```{r}
+boxplot(salary2 ~ position, data = nba,
+xlab = "Position", ylab = "Salary (in millions)")
+```
+
+Based off what we see from the plot, there doesn't seem to be a correlation between the salary of players and the position that they play. The medians of the data as well as the quantiles of teh data seem to be rather similiar and thus we have no evidence with any thing that the salaries between different positions differ in pay. We once again could test this with a one way ANOVA, but is very clear that it would result would proabaly be us not rejecting the null. 
+
+###b)
+```{r}
+boxplot(points ~ position, data = nba,
+xlab = "Position", ylab = "Points")
+```
+
+We additionally do not see any general trends regarding points as well. We see that though there are many players that score alot, ther differences between positions does not seem to different between the 5 groups of players. Though we do note that point guards seem to have  the highest variance of points. 
+
+###c)
+```{r}
+palette2 = c("#66c2a5", "#fc8d62" ,"#8da0cb", "#e78ac3", "#a6d854")
+
+pos_colors <- c()
+pos_colors[nba$position == 'C'] <- palette2[1]
+pos_colors[nba$position == 'PF'] <- palette2[2]
+pos_colors[nba$position == 'PG'] <- palette2[3]
+pos_colors[nba$position == 'SF'] <- palette2[4]
+pos_colors[nba$position == 'SG'] <- palette2[5]
+
+plot(salary ~ points, data = nba, log = "xy", main = "",
+xlab = "Points (log scale)", ylab = "Salary (log $)",
+col = pos_colors, pch = 19, cex = 0.6)
+legend("bottomright", fill = palette2, legend = levels(nba$position),
+title = "Positions", cex = 0.8)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

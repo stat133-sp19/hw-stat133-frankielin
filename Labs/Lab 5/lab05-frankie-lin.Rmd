@@ -1,0 +1,223 @@
+---
+title: "Lab 5"
+author: "Frankie Lin"
+date: "2/28/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+setwd('/Users/Frankie/Documents/School/Stat 133/Labs/Lab 5')
+```
+
+#1) Your Turn*: Lab Directory
+```{r eval = FALSE}
+#Open (or launch) the command line
+cd '/Users/Frankie/Documents/School/Stat 133/Labs/Lab 5/'
+
+#Use the command pwd to see what’s your current directory
+pwd
+
+#Use mkdir to create a new directory stat133-lab05
+mkdir stat133-lab05
+
+#Change directory to stat133-lab05
+cd stat133-lab05
+
+#Use the command curl to download the following text file:
+curl -O http://textfiles.com/food/bread.txt
+
+#Use the command ls to list the contents in your current directory
+curl -O http://textfiles.com/food/btaco.txt
+curl -O http://textfiles.com/food/1st_aid.txt
+curl -O http://textfiles.com/food/beesherb.txt
+curl -O http://textfiles.com/food/bakebred.txt
+
+
+#Use the command curl to download these other text files:
+curl -O http://archive.ics.uci.edu/ml/machine-learning-databases/forest-fires/forestfires.csv
+curl -O http://web.pdx.edu/~gerbing/data/cars.csv
+curl -O http://web.pdx.edu/~gerbing/data/color.csv
+curl -O http://web.pdx.edu/~gerbing/data/snow.csv
+curl -O http://web.pdx.edu/~gerbing/data/mid1.csv
+curl -O http://web.pdx.edu/~gerbing/data/mid2.csv
+curl -O http://web.pdx.edu/~gerbing/data/minutes1.csv
+curl -O http://web.pdx.edu/~gerbing/data/minutes2.csv
+
+```
+
+#2) Your Turn*: Inspecting a Directory
+```{r eval = FALSE}
+#Use the command ls to list the contents in your current directory
+ls
+
+#Now try ls -l to list the contents in your current directory in long format
+ls -l
+
+#Look at the man documentation of ls to find out how to list the contents in reverse order
+ls -lr
+
+#How would you list the contents in long format arranged by time?
+ls - lt
+
+#Find out how to use the wildcard * to list all the files with extension .txt
+list -l grep *.txt
+
+#Use the wildcard * to list all the files with extension .csv in reverse order
+ls -l *.txt
+
+#You can use the character ? to represent a single character: e.g. ls mid?.csv. Find out how to use the wilcard ? to list .csv files with names made of 4 characters (e.g. mid1.csv, snow.csv)
+ls -l ????.csv
+
+#The command ls *[1]*.csv should list .csv files with names containing the number 1 (e.g. mid1.csv, minutes1.csv). Adapt the command to list .csv files with names containing the number 2.
+ls -l *[2]*.csv
+
+#Find out how to list files with names containing any number.
+ls -l *[0-9]*.csv
+
+```
+
+#3) Your Turn*: Moving Files
+```{r eval = FALSE}
+#Inside stat133-lab05 create a directory data
+mkdir data
+
+#Change directory to data
+cd data
+
+#Create a directory txt-files
+mkdir txt-files
+
+#Create a directory csv-files
+mkdir csv-files
+
+#Use the command mv to move the bread.txt file to the folder txt-files. Without changing directories, use ls to confirm that bread.txt is now inside txt-files.
+mv ../bread.txt txt-files
+ls txt-files
+
+#Use the wildcard * to move all the .txt files to the directory txt-files. Without changing directories, use ls to confirm that all the .txt files are inside txt-files.
+mv ../*.txt txt-files
+ls txt-files
+
+#Use the wildcard * to move all the .csv files to the directory csv-files. Without changing directories, use ls to confirm that all the .csv files are inside csv-files.
+mv ../*.csv csv-files
+ls csv-files
+
+#Try using the command tree to see a visual display of the filestructure. Warning: You may not have this command in git-bash or in another shell flavor.
+tree
+```
+
+#4) Your Turn*: Copying Files
+```{r eval = FALSE}
+#Go back to the parent directory stat133-lab05
+cd '/Users/Frankie/Documents/School/Stat 133/Labs/Lab 5/stat133-lab05'
+
+#Create a directory copies
+mkdir copies
+
+#Use the command cp to copy the bread.txt file (the one inside the folder txt-files) to the copies directory
+cp ./data/txt-files/bread.txt ./copies
+
+#Without changing directories, use ls to confirm that bread.txt is now inside copies.
+ls copies
+
+#Use the wildcard * to copy all the .txt files in the directory copies
+cp ./data/txt-files/*.txt ./copies
+
+#Without changing directories, use ls to confirm that all the .txt files is now inside copies.
+ls copies
+
+#Use the wildcard * to copy all the .csv files in the directory copies
+cp ./data/csv-files/*.csv ./copies
+
+#Try using the command tree to see a visual display of the filestructure.
+tree 
+```
+
+#5) Your Turn*: Renaming and Deleting Files
+```{r eval = FALSE}
+#Change to the directory copies
+cd copies
+
+#Use the command mv to rename the file bread.txt as bread-recipe.txt
+mv bread.txt bread-recipe.txt
+
+#Rename the file cars.csv as autos.csv
+mv cars.csv autos.csv
+
+#Rename the file btaco.txt as breakfast-taco.txt
+mv btaco.txt breakdast-taco.txt
+
+#Change to the parent directory (i.e. stat133-lab05)
+cd ../
+
+#Rename the directory copies as copy-files
+mv copies copy-files
+
+#Find out how to use the rm command to delete the .csv files that are in copy-files
+rm ./copy-files/*.csv
+
+#Find out how to use the rm command to delete the directory copy-files
+rm -r copy-files
+
+#List the contents of the directory txt-files displaying the results in reverse (alphabetical) order
+ls -r ./data/txt-files/
+
+```
+
+#Exporting Objects from R to External Files
+```{r}
+#Export a data frame with columns mpg, disp, and hp, to a CSV file dataset.csv in the exports/ subdirectory.
+library(ggplot2)
+
+setwd("/Users/Frankie/Documents/School/Stat 133/Labs/Lab 5/")
+getwd()
+data(mtcars)
+names(mtcars)
+
+write.csv(mtcars[,c("mpg", "disp", "hp")], 'stat133-lab05/exports/dataset.csv')
+
+
+#Export the output of str() on mtcars to a text file called mtcars-structure.txt (inside the exports/ subdirectory).
+sink(file = 'stat133-lab05/exports/mtcars-structure.txt')
+str(mtcars)
+sink()
+
+
+#Export the summary() of the entire data frame mtcars to a text file summary-mtcars.txt, in the exports/ folder.
+sink(file = 'stat133-lab05/exports/summary-mtcars.txt')
+summary(mtcars)
+sink()
+
+#Open the help documentation of png() and related graphic devices.
+help(png)
+
+#Use png() to save a scatterplot of mpg and wt with plot(). Save the graph as scatterplot-mpg-wt.png in the exports/ folder.
+png(filename = "stat133-lab05/exports/scatterplot-mpg-wt.png")
+plot(mtcars$mpg, mtcars$wt, pch = 20, 
+     xlab = 'Miles per Gallon', ylab = 'Weight')
+dev.off()
+
+#Save another version of the scatterplot between hp and wt, but now try to get an image with higher resolution. Save the plot as scatterplot-hp-wt.png in exports/.
+png(filename = "stat133-lab05/exports/scatterplot-hp-wt.png", width = 720, height = 720)
+plot(mtcars$hp, mtcars$wt, pch = 20, 
+     xlab = 'Horsepower', ylab = 'Weight')
+dev.off()
+
+#Save a histogram in JPEG format of mpg with dimensions (width x height) 600 x 400 pixels, name the file histogram-mpg.jpeg.
+jpeg(filename = "stat133-lab05/exports/histogram-mpg.jpg", width = 600, height = 400)
+hist(mtcars$mpg, xlab = "MPG")
+dev.off()
+
+#Use pdf() to save the previous histogram of mpg in PDF format, with dimensions (width x height) 7 x 5 inches, name the file histogram-mpg.pdf.
+pdf('stat133-lab05/exports/histogram-mpg.pdf',width=7,height=5) 
+hist(mtcars$mpg, xlab = "MPG")
+dev.off()
+
+#The package "ggplot2" comes with a wrapper function ggsave() that allows you to save ggplot graphics to a specified file. By default, ggsave() saves images in PDF format.
+ggplot(data= mtcars, aes(x = mpg, y = disp)) + geom_point()
+
+#Use ggplot() to make a scatterplot of mpg and disp, and store it in a ggplot object named gg_mpg_disp. Then use ggsave() to save the plot with dimensions (width x height) 7 x 5 inches, as scatterplot-mpg-disp.pdf.
+ggsave('gg_mpg_disp.pdf', ggplot(data= mtcars, aes(x = mpg, y = disp)) + geom_point(), path = '/Users/Frankie/Documents/School/Stat 133/Labs/Lab 5/stat133-lab05/exports')
+```
+

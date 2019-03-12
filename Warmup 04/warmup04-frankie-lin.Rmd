@@ -1,0 +1,174 @@
+---
+title: "Warm Up 4"
+author: "Frankie Lin"
+date: "2/22/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#1) Importing Data
+```{r}
+#loading 
+library(dplyr)
+library(ggplot2)
+library(readr)
+
+# assembling url so it fits on the screen
+github <- 'https://raw.githubusercontent.com/ucb-stat133/stat133-hws/'
+repo <- 'master/data/nba2018-players.csv'
+datafile <- paste0(github, repo)
+
+```
+
+###a.
+```{r}
+cols = c("ccfiiiicdiiiiii")
+```
+
+###b.
+```{r}
+dat <- read_csv(datafile, col_names = TRUE,col_types = cols)
+summary(dat)
+```
+
+###c.
+```{r}
+class(dat)
+```
+
+#2) Technical Questions about "readr"
+###a.
+After doing a little googling and self research,  we see that a tibble is a more modern reimagining of data.frame. They are basically dataframes but they tweak a few of the functions in order to to basically be a bit more modern. Some distinct differences is that the tibble does not change the type of inputs and can have column titles that are unacceptable for standard base R dataframes. However, the two main differences come from the fact that: 
+  
+  -1. A tibble prints only the first 10 rows of the dataframe and that all the columns fit one screen when called upon with additional options to adjust what and how things are printed
+  
+  -2. When you subset using a tibble, it will only subset the data based off full matching rather than partial matching. Thus they are simply a more strict function and will give you a warning if something does not exist. 
+  
+###b. 
+You can indeed only import a few columns with by the internal specification of col_types. In this case we would set col_types = c("cc______d__d___"). This would allow us to omit the unwanted columns. 
+```{r}
+read_csv(datafile, col_names = TRUE,col_types = c("cc______d__d___"))
+```
+
+###c.
+* header = col_names
+* col.names = col_names
+* na.strings = na
+* colClasses = col_classes
+
+#3) Salaries by Team
+###a.
+```{r}
+team_salaries <- arrange(
+  summarise(
+  group_by(dat, team),
+  total_salary = sum(salary / 1000000),
+  mean_salary = mean(salary / 1000000),
+  median_salary = median(salary / 1000000)
+  ),
+  desc(total_salary)
+  )
+```
+
+###b.
+```{r}
+as.data.frame(team_salaries)
+```
+
+###c.
+```{r}
+library(ggthemes)
+
+ggplot(team_salaries, aes(x=reorder(team, total_salary), y=total_salary)) +
+  geom_bar(stat='identity') +
+  geom_hline(yintercept = mean(team_salaries$total_salary), color = "red") +
+  coord_flip() +
+  ggtitle("NBA Teams Ranked by Total Salary") +
+  ylab("Total Salary (in millions)") + 
+  xlab("Teams")
+```
+
+#4) Points by Team
+###a.
+```{r}
+team_points <-
+  arrange(
+  summarise(
+  group_by(dat, team),
+  total_points = sum(points),
+  mean_points = mean(points),
+  median_points = median(points)
+  ),
+  desc(total_points)
+  )
+```
+
+###b.
+```{r}
+as.data.frame(team_points) 
+```
+
+###c.
+```{r}
+ggplot(team_points, aes(x=reorder(team, total_points), y=total_points)) +
+  geom_bar(stat='identity') +
+  geom_hline(yintercept = mean(team_points$total_points), color = "red") +
+  coord_flip() +
+  ggtitle("NBA Teams Ranked by Total Points") +
+  ylab("Total Points") + 
+  xlab("Teams")
+```
+
+#5) Cost of Scored Points
+###a. 
+```{r}
+points_salary <- left_join(team_points, team_salaries, by = "team")
+```
+
+###b.
+```{r}
+summary(points_salary)
+```
+
+###c.
+```{r}
+points_salary <- mutate(points_salary, cost_point = (total_salary * 1000000)/total_points)
+```
+
+###d.
+```{r}
+summary(points_salary$cost_point)
+```
+
+###e.
+```{r}
+ggplot(points_salary, aes(x=reorder(team, cost_point), y=cost_point)) +
+  geom_bar(stat='identity') +
+  geom_hline(aes(yintercept = mean(points_salary$cost_point), linetype = "Average Cost per Point"), color = "red", show.legend = TRUE) +
+  coord_flip() +
+  ggtitle("NBA Teams Ranked by Cost per Point") +
+  ylab("Cost per Point (in dollars)") + 
+  xlab("Teams") +
+  scale_linetype_manual(name = "Legend", values = c(2), guide = guide_legend(override.aes = list(color = c("red"))))
+
+```
+
+###f.
+```{r}
+qf <- mutate(points_salary, cost_point_quartile = factor(ntile(cost_point, 4))) 
+levels(qf$cost_point_quartile) <- c("First Quantile", "Second Quantile", "Third Quantile", "Fourth Quantile")
+
+ggplot(qf, aes(x=mean_points, y=mean_salary, col = cost_point_quartile)) + 
+  geom_point() +
+  ggtitle("NBA Team Mean Cost versus Mean Points Scatter Plot") +
+  ylab("Mean Cost (in millions)") + 
+  xlab("Mean Points Scored") +
+  labs(color='Cost Points Quantile') 
+  
+```
+
+
+

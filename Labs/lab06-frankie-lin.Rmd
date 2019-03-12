@@ -1,0 +1,69 @@
+---
+title: "Lab 6"
+author: "Frankie Lin"
+date: "3/7/2019"
+output: html_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Part 1) Git Workshop
+```{r eval = FALSE}
+# use your own user name
+git config --global user.name "Frankie Lin"
+
+# use your own email
+git config --global user.email "frankie.lin@berkeley.edu"
+
+# colors
+git config --global color.ui "auto"
+
+```
+
+#Your Turn*: 1) Create a New GitHub Repository
+```{r eval = FALSE}
+cd /Users/Frankie/Desktop
+
+mkdir demo-repo
+
+cd demo-repo
+
+git init
+```
+
+
+
+#Your Turn*: 3) Adding a README file
+```{r eval = FALSE}
+echo "# Demo Repo" >> README.md
+
+git status
+
+git add README.md
+
+git status
+
+git commit -m "first commit"
+```
+
+#Your Turn*: 4) Adding a remote
+```{r eval = FALSE}
+git remote add origin https://github.com/frankielin/demo-repo.git/
+
+git remote -v
+
+origin  https://github.com/frankielin/demo-repo.git (fetch)
+origin  https://github.com/frankielin/demo-repo.git (push)
+```
+
+#Your Turn*: 5) Pushing changes to a remote repo
+```{r eval = FALSE}
+git status
+
+git push origin master
+```
+
+
+
+

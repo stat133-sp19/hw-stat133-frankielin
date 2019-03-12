@@ -1,0 +1,128 @@
+---
+title: "Lab 2"
+author: "Frankie Lin"
+date: "2/7/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Loading Data
+```{r}
+setwd('/Users/Frankie/Documents/School/Stat 133/Labs')
+load('nba2018-salary-points.RData')
+```
+
+#Subsetting Vectors
+```{r}
+four <- head(player, n = 4)
+four[1]
+four[0]
+four[-1]
+four[-c(1, 2, 3)]
+four[5]
+four[c(1, 2, 2, 3, 3, 3)]
+
+#Your Turn
+##Even players
+player[seq(1, length(player), 2)]
+
+##Odd salary
+salary[seq(2, length(salary), 2)]
+
+#all multiples of 5 (e.g. 5, 10, 15, etc) of team
+team[seq(5, length(salary), 5)]
+
+#elements in positions 10, 20, 30, 40, etc of scored
+position[seq(10, length(position), 10)]
+
+#all the even elements in team but this time in reverse order
+team[seq(length(salary) - 1, 2,-2)]
+
+
+
+
+
+```
+
+#Logical Subsetting and Comparisons
+```{r}
+#Your Turn
+##players in position Center, of Warriors (GSW)
+player[team  == "GSW" & position == "C"]
+
+##players of both GSW (warriors) and LAL (lakers)
+player[team == "GSW" | team == "LAL"]
+
+#players in positions Shooting Guard and Point Guards, of Lakers (LAL)
+player[(position == "PG" | position == "SG") & team == "LAL"]
+
+#subset Small Forwards of GSW and LAL
+player[position == "SF" & (team == "LAL" | team == "GSW")]
+
+#name of the player with largest salary
+player[salary == max(salary)]
+
+#name of the player with smallest salary
+player[salary == min(salary)]
+
+#name of the player with largest number of scored points
+player[scored == max(scored)]
+
+#salary of the player with largest number of points
+salary[scored == max(scored)]
+
+#largest salary of all Centers
+player[position == 'C'][which.max(salary[position == 'C'])]
+
+#team of the player with the largest number of scored points
+team[scored == max(scored)]
+
+#name of the player with the largest number of 3-pointers
+player[points3 == max(points3)]
+
+```
+
+#Some plotting
+```{r}
+library(plotly)
+plot_ly(x = scored, y = salary, type = "scatter", mode = "markers")
+
+log_scored <- log(scored)
+log_salary <- log(salary)
+
+plot(log_scored, log_salary)
+text(log_scored, log_salary, labels = abbreviate(player))
+
+#Your Turn
+par(mfrow = c(1,2))
+GSW_score <- scored[team == "GSW"]
+GSW_player <- player[team == "GSW"]
+GSW_salary <- salary[team == "GSW"]
+
+plot(GSW_score, GSW_salary)
+text(GSW_score, GSW_salary, labels = abbreviate(GSW_player))
+
+plot(log(GSW_score), log(GSW_salary))
+text(log(GSW_score), log(GSW_salary), labels = abbreviate(GSW_player))
+
+  
+```
+
+#Factors
+```{r}
+position_fac <- factor(position)
+table(position_fac)
+
+position_fac[team == "GSW"]
+position_fac[salary > 15000000]
+table(position[salary > 15000000])
+table(team[position_fac == "SG"])
+
+
+#Your Turn
+plot(scored, salary, col = position_fac, pch = c(1, 2, 3, 4), cex = c(.2,.2,.2,.2), xlab = "Points Scored", ylab = "Salary in Dollars")
+```
+

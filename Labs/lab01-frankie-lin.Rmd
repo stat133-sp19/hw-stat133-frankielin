@@ -1,0 +1,79 @@
+---
+title: "Lab 1"
+author: "Frankie Lin"
+date: "1/31/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+phone <- 80
+transportation <- 20
+groceries <- 527
+gym <- 10
+rent <- 1500
+other <- 83
+total <- phone + transportation + groceries + gym + rent + other
+print(paste("Leia's total expense for the semester is", total * 5))
+print(paste("Leia's total expense for the year is", total * 10))
+```
+
+```{r}
+expenses <- c(phone, transportation, groceries, gym, rent, other)
+names(expenses) <- c("Cell Phone","Transport", "Groceries", "Gym", "Rent", "Other")
+barplot(sort(expenses, decreasing = TRUE)) 
+text(.70, sort(expenses, decreasing = TRUE)[1] - 50, sort(expenses, decreasing = TRUE)[1])
+text(1.9, sort(expenses, decreasing = TRUE)[2] + 50, sort(expenses, decreasing = TRUE)[2])
+text(3.1, sort(expenses, decreasing = TRUE)[3] + 50, sort(expenses, decreasing = TRUE)[3])
+text(4.3, sort(expenses, decreasing = TRUE)[4] + 50, sort(expenses, decreasing = TRUE)[4])
+text(5.5, sort(expenses, decreasing = TRUE)[5] + 50, sort(expenses, decreasing = TRUE)[5])
+text(6.7, sort(expenses, decreasing = TRUE)[6] + 50, sort(expenses, decreasing = TRUE)[6])
+```
+```{r}
+a = 3
+b = 4 
+sqrt(a^2 + b^2)
+```
+
+```{r}
+require('stats')
+n = 5 
+k = 2
+p = 0.5
+bin.prob <- choose(n,k) * (p^k) * ((1-p)^(n-k))
+bin.prob
+```
+
+```{r}
+n = 10 
+k = 3
+p = 1/6
+bin.prob <- choose(n,k) * (p^k) * ((1-p)^(n-k))
+bin.prob
+
+(norm.coin <- dbinom(2,5,.5))
+(norm.die <- dbinom(3,3,1/6))
+(bias.coin <- dbinom(2,5,.35))
+(more.than.3 <- dbinom(4,5,.35) + dbinom(5,5,.35))
+```
+```{r}
+require("stringr") 
+require("RColorBrewer")
+require("XML")
+
+x <- 2
+(3*x^2 + 4*x + 8)
+
+x <- (-3:3)
+(3*x^2 + 4*x + 8)
+
+
+
+
+
+```
+

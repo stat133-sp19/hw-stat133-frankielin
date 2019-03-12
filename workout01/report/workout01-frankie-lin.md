@@ -5,6 +5,8 @@ Frankie Lin
 Introduction
 ============
 
+<img src="../images/warriors-starting-5.jpg" width="1040" style="display: block; margin: auto;" />
+
 The Golden State Warriors have been the dominant face of the NBA for the past few years with three championships in the past four years. Spouting a roster that has at least three All-Stars every year since their unprecedented and historic run the Golden State Warriors, along with coach Steve Kerr, have solidified their position as a dynasty within the NBA. Even coming to topple the King himself, Lebron James, and effectively changing the composition of the league, the Warriors have left their mark on history. But with rumblings across the league and ever shifting landscape that is basketball, all dynasties are destined to come to an end.
 
 Background/Motivation
@@ -127,3 +129,8 @@ Conclusion
 ==========
 
 In all, the accumulation of talent on the Golden State Warriors has been nothing but extraordinary. Playing around the three-point ball, the team has successful changed the mindset of the league and become the reigning kings of the court. When this dynasty comes to an end, we will all remember the Golden State Warriors as the team that defied the logic when it came to crafting a roster. Implementing players and a system that had never been thought of, the Warriors truly shifted the NBA into a new era.
+
+References
+==========
+
+Images: Getty Images
