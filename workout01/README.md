@@ -1,0 +1,3 @@
+#Project Description
+On this project, the goal is to understand and analyze shots made in the NBA. In pariculiar, we dive into and map out shots made by 5 NBA players, all of which are starters on the Golden State Warriors. As by the instuctions stated by the proffessor, the goal of the assignment is to more than just understand how players make thier shots and what defines a more efficient player. We also hope to build skills regarding the 1) operating and using a github repository, 2) visualizing data and showing the summaries of said data, and 3) reporting a communicating the data out. In all, this project's goal is to aid in the understanding and implementation of the Data Analysis Cycle. 
+
