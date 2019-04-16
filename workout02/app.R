@@ -200,7 +200,9 @@ server <- function(input, output) {
   
   # Developing a view option by which we can export a table 
   output$view <- renderPrint({
-    (data())
+    out <- data()
+    colnames(out) <- c("Year", "No Contribution", "Fixed Contribution", "Growing Contribution")
+    out
   })
 
     
