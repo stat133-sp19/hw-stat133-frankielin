@@ -1,0 +1,177 @@
+---
+title: "Warm Up 5"
+author: "Frankie Lin"
+date: "3/17/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+
+#Function gaussian()
+```{r}
+#' @title gaussian
+#' @description Return the computed probability density
+#' @param x = numeric vector for x (default 0)
+#' @param m = numeric vector for μ (default 0)
+#' @param s = numeric vector for sigma (default 1)
+#' @return final grade
+
+gaussian <- function(x = 0, m = 0,s = 1) {
+    if (s <= 0) {
+    stop("s must be greater than 0")
+  }
+  g = (exp(-0.5*((x-m)/s)^2))/(s*sqrt(2*pi))
+  return(g)
+}
+
+# test set 1
+gaussian(x = 0, m = 0, s = 1)
+gaussian(x = 1, m = 0, s = 2)
+
+# test set 2
+gaussian(x = 1, m = 0, s = 0)
+gaussian(x = 1, m = 0, s = -1)
+
+# gaussian curve
+x_values <- seq(from = -4.5, to = 4.5, by = 0.1)
+y_values <- gaussian(x_values, m = 0, s = 2)
+plot(x_values, y_values, las = 1, type = "l", lwd = 2)
+```
+
+#Curve Replication
+```{r}
+x1 <- seq(from = -5.5, to = 5.5, by = 0.01)
+y_blue <- gaussian(x = x1, m = 0, s = sqrt(0.2))
+y_red <- gaussian(x = x1, m = 0, s = sqrt(1))
+y_yellow <- gaussian(x = x1, m = 0, s = sqrt(5))
+y_green <- gaussian(x = x1, m = -2, s = sqrt(0.5))
+
+
+plot(x1, y_blue, type="l", col="#1C7CF0", lwd = 2,
+     xlim = c(-5.5,5.5), 
+     ylim = c(0,1),
+     xlab = bquote(x),
+     ylab = bquote(phi[mu~","~sigma^2] * (x))
+     )
+grid (NULL,NULL, lty = 6)
+lines(x1, y_red, col = "#DA3D1A", lwd = 2)
+lines(x1, y_yellow, col = "#DAC51A", lwd = 2)
+lines(x1, y_green, col = "#3BBE18", lwd = 2)
+legend("topright", 
+       legend=c(expression(paste(mu," = ", 0, ", ", sigma^2, " = " , 0.2)),
+                expression(paste(mu," = ", 0, ", ", sigma^2, " = " , 1)),
+                expression(paste(mu," = ", 0, ", ", sigma^2, " = " , 5)),
+                expression(paste(mu," = ", -2, ", ", sigma^2, " = " , 0.5))
+                ),
+       col=c("#1C7CF0", "#DA3D1A", "#DAC51A", "#3BBE18"), 
+       lty=1,
+       lwd = 2, 
+       cex=0.8,
+       box.lty=0)
+title(sub = "Figure 1: Normal probability density functions")
+
+```
+
+#Descriptive Statistics
+```{r}
+#' @title descriptive
+#' @description returns a named vector of descriptive statistics of the min, Q1, median, mean, Q3, max, range, IQR, and standard deviation
+#' @param x = numeric vector for x (default 0)
+#' @param na.rm = whether to remove missing values before computations (default FALSE)
+#' @return named vector of descriptive statistics
+
+descriptive <- function(x = 0 , na.rm = FALSE){
+  if(!is.numeric(x)) {
+    stop("input vector must be numeric")
+  } else if (na.rm) {
+    x = x[!is.na(x)]
+  }
+  min_x = min(x)
+  q1_x = quantile(x, probs = 0.25, names = FALSE)
+  median_x = median(x)
+  mean_x = mean(x)
+  q3_x = quantile(x, probs = 0.75, names = FALSE)
+  max_x = max(x)
+  range_x = max_x - min_x
+  iqr_x = IQR(x)
+  sd_x = sd(x)
+  
+  output = c(min_x, q1_x, median_x, mean_x, q3_x, max_x, range_x, iqr_x, sd_x)
+  
+  names(output) = c("min", "Q1", "median", "mean", "Q3", "max", "range", "IQR", "sd")
+  return(output)
+}
+
+# input vectors
+set.seed(100)
+x <- rnorm(100)
+y <- x
+y[sample(1:100, size = 10)] <- NA
+
+# test set 1
+descriptive(x)
+descriptive(y)
+descriptive(y, na.rm = TRUE)
+descriptive(letters)
+
+# test set 2
+a <- descriptive(x)
+class(a)
+length(a)
+names(a)
+```
+
+#3) Minkowski Distance
+```{r}
+#' @title minkowski
+#' @description calculates the minkowski distance for a set of points
+#' @param x = numeric vector for one point
+#' @param y = numeric vector for the other point
+#' @param p = either a numeric value greater than 1, or a character string "max" (default 1)
+#' @return value of Minkowski Distance
+
+minkowski <- function(x, y , p = 1){
+  if (length(x) != length(y)){
+    stop("x and y have different lengths")
+  } else if (is.numeric(p) & p < 1) {
+    stop("p cannot be less than 1")
+  } else if (is.character(p) & p != "max") {
+    stop("invalid character value for p")
+  } else if (p == "max"){
+    output = max(abs(x-y))
+    return(output)
+  }
+  output = (sum(abs(x-y)))^(1/p)
+  return(output)
+}
+
+
+# some points
+point1 <- c(0, 0)
+point2 <- c(1, 1)
+point3 <- sqrt(c(2, 2))
+point4 <- c(0, 1)
+point5 <- c(1, 1, 1)
+
+# test set 1
+minkowski(point1, point2, p = 1)
+minkowski(point1, point3, p = 2)
+minkowski(point1, point2, p = 'max')
+
+# test set 2
+minkowski(point4, point5, p = 1)
+minkowski(point1, point2, p = 0.5)
+minkowski(point1, point2, p = 'min')
+```
+
+
+
+
+
+
+
+
+
+

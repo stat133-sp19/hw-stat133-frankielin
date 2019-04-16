@@ -1,0 +1,254 @@
+---
+title: "Lab 8"
+author: "Frankie Lin"
+date: "3/21/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error= TRUE)
+```
+
+#Your Turn*: Summation Series
+```{r}
+n = 500
+vals <- 0
+
+for (i in 0:n){
+  vals =vals +  (1/(2^i))
+}
+
+vals
+
+#we converge to 2
+```
+
+The series convereges to 2. 
+
+#Your Turn*: Arithmetic Series
+```{r}
+d = 3
+a_1 = 3
+n = 500
+vals <- numeric(n)
+
+for (i in 1:n){
+  vals[i] <- a_1 + (i - 1)*d
+}
+
+sum(vals)
+
+```
+
+The series does not converge. 
+
+#Your Turn*: Geometric Sequence
+```{r}
+r = 2
+a_1 = 3
+n = 500
+sequence <- numeric(n)
+
+for (i in 1:n){
+  sequence[i] <- a_1 * r ^(i-1) 
+}
+
+sum(sequence)
+```
+
+The series does not converge. 
+
+#Your Turn*: Sine Approximation
+```{r}
+x = pi/2
+n = 5
+sine_approx <- numeric(n)
+
+for (i in 1:n){
+  if (i %% 2 == 0){
+    sine_approx[i] = -(((x)^(2*i - 1))/factorial(2*i-1))
+  } else {
+    sine_approx[i] = ((x)^(2*i - 1))/factorial(2*i-1)
+  }
+}
+
+sum(sine_approx)
+
+
+
+```
+
+#Your Turn*: Average
+```{r}
+#for loop
+x_vec <- 1:100
+n <- length(x_vec)
+sum_entries = 0
+
+for (i in 1:n) {
+  sum_entries <- sum_entries + x_vec[i]
+}
+
+(average = sum_entries / n)
+
+#while loop
+sum_entries = 0
+x_vec <- 1:100
+n <- length(x_vec)
+i = 1
+
+while (i <= n) {
+  sum_entries = sum_entries + x_vec[i]
+  i = i + 1
+}
+
+(average = sum_entries/n)
+
+#repeat loop 
+sum_entries = 0
+x_vec <- 1:100
+n <- length(x_vec)
+i = 1
+
+repeat{
+  sum_entries = sum_entries + x_vec[i]
+  i = i + 1
+  if (i > n) break
+}
+
+(average = sum_entries/n)
+
+```
+
+#Your Turn*: Standard Deviation
+```{r}
+#For Loop
+x_vec = 1:100
+n = length(x_vec)
+sd_entries = 0
+
+for (i in 1:n){
+  sd_entries = sd_entries + (x_vec[i] - average)^2
+}
+
+(std_dev <- sqrt(sd_entries/(n-1)))
+
+#While Loop
+sd_entries = 0
+x_vec <- 1:100
+n <- length(x_vec)
+i = 1
+
+while (i <= n) {
+  sd_entries = sd_entries + (x_vec[i] - average)^2
+  i = i + 1
+}
+
+(std_dev <- sqrt(sd_entries/(n-1)))
+
+#repeat loop 
+sd_entries = 0
+x_vec <- 1:100
+n <- length(x_vec)
+i = 1
+
+repeat{
+  sd_entries = sd_entries + (x_vec[i] - average)^2
+  i = i + 1
+  if (i > n) break
+}
+
+(std_dev <- sqrt(sd_entries/(n-1)))
+```
+
+#Your Turn*: Geometric Mean
+```{r}
+#For Loop
+x_vec = 1:50
+n = length(x_vec)
+geo_mean_entries <- 1
+
+for (i in 1:n){
+  geo_mean_entries <- geo_mean_entries * x_vec[i]
+}
+
+(geo_mean = geo_mean_entries^(1/n))
+
+#While Loop
+geo_mean_entries = 1
+x_vec <- 1:50
+n <- length(x_vec)
+i = 1
+
+while (i <= n) {
+  geo_mean_entries = geo_mean_entries * x_vec[i]
+  i = i + 1
+}
+
+(geo_mean = geo_mean_entries^(1/n))
+
+#Repeat Loop
+geo_mean_entries = 1
+x_vec <- 1:50
+n <- length(x_vec)
+i = 1
+
+repeat{
+  geo_mean_entries = geo_mean_entries * x_vec[i]
+  i = i + 1
+  if (i > n) break
+}
+
+(geo_mean = geo_mean_entries^(1/n))
+
+```
+
+#Your Turn*: Distance Matrix of Letters
+```{r}
+# random distance matrix
+num_letters <- length(LETTERS)
+set.seed(123)
+values <- sample.int(num_letters) 
+distances <- values %*% t(values)
+diag(distances) <- 0
+dimnames(distances) <- list(LETTERS, LETTERS)
+
+#get dist
+get_dist = function(distances, ltrs){
+  if (sum(ltrs %in% LETTERS) != length(ltrs)){
+    stop("Unrecognized Character")
+  }
+  total = 0
+  for (i in 1:(length(ltrs) - 1)) {
+    total = total + distances[ltrs[i], ltrs[i + 1]]
+  }
+  return(total)
+}
+
+vec <- c('E', 'D', 'A')
+get_dist(distances, vec)
+  
+err <- c('E', 'D', ')')
+get_dist(distances, err)
+
+#Tests
+cal <- c('C', 'A', 'L')
+stats <- c('S', 'T', 'A', 'T', 'S')
+oski <- c('O', 'S', 'K', 'I')
+zzz <- rep('Z', 3)
+lets <- LETTERS
+f_name <-  c('F', 'R', 'A', 'N', 'K', 'I', 'E')
+l_name <- c('L', 'I', 'N')
+
+get_dist(distances,cal)
+get_dist(distances,stats)
+get_dist(distances,oski)
+get_dist(distances,zzz)
+get_dist(distances,lets)
+get_dist(distances,f_name)
+get_dist(distances,l_name)
+
+
+```
+
+

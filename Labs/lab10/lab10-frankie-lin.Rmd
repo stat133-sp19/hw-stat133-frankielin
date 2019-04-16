@@ -1,0 +1,77 @@
+---
+title: "Lab 10"
+author: "Frankie Lin"
+date: "4/11/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#A less basic probability problem
+#Your Turn*
+```{r}
+require(dplyr)
+require(ggplot2)
+
+rm(list = ls())
+
+seed = 777
+set.seed(seed)
+n=1000
+base <- data.frame(reps = 1:n)
+num0.vec <- c()
+num1.vec <- c()
+num2.vec <- c()
+num3.vec <- c()
+num4.vec <- c()
+
+sample.mat <- matrix(nrow = n, ncol =4)
+
+
+box1 <- c("blue", "blue","red")
+box2 <- c("blue", "blue", "red", "red", "red", "white")
+
+for (i in 1:n){
+  if(runif(1) > 0.5){
+    sample.mat[i,] = sample(box1, 4, replace = TRUE)
+  } else{
+    sample.mat[i,] = sample(box2, 4, replace = FALSE)
+  }
+  blue = (sample.mat == "blue")
+  row.sum = rowSums(blue)
+  
+  num0.vec[i] = sum((row.sum == 0), na.rm = TRUE)/i
+  num1.vec[i] = sum((row.sum == 1), na.rm = TRUE)/i
+  num2.vec[i] = sum((row.sum == 2), na.rm = TRUE)/i
+  num3.vec[i] = sum((row.sum == 3), na.rm = TRUE)/i
+  num4.vec[i] = sum((row.sum == 4), na.rm = TRUE)/i
+  
+}
+
+base <- 
+  base %>%
+  mutate(
+    zero = num0.vec,
+    one = num1.vec,
+    two = num2.vec,
+    three = num3.vec,
+    four = num4.vec
+  )
+
+
+ggplot(data = base, aes(x = reps)) + 
+  geom_line(aes(y = zero, color = "0")) +
+  geom_line(aes(y = one, color = "1")) +
+  geom_line(aes(y = two, color = "2")) +
+  geom_line(aes(y = three, color = "3")) +
+  geom_line(aes(y = four, color = "4")) +
+  scale_color_manual(name = "Colors", values = c("green", "blue", "red", "orange", "grey")) + 
+  ggtitle("Relative Frequency of number of blue balls") +
+  ylab("Frequency") +
+  xlab("Repititions")
+
+
+```
+

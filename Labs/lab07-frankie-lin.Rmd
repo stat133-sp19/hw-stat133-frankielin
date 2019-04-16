@@ -1,0 +1,204 @@
+---
+title: "Lab 7"
+author: "Frankie Lin"
+date: "3/14/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE)
+```
+
+#Your Turn: Simple Math Functions
+```{r}
+#' @title variable squared
+#' @description squares the variable
+#' @param x a number of vector that needs to be squared
+#' @return x squared
+
+f <- function(x) {
+  output = x^2
+  return(output)
+}
+
+#' @title 2 times variable plus 5
+#' @description multiples varaible by 2 then adds 5
+#' @param x a number or vector
+#' @return computed value
+g <- function(x) {
+  output = 2*x + 5
+  return(output)
+}
+
+#' @title f of g
+#' @description take the f of g of a varaible
+#' @param x a number or vector
+#' @return (2x+5)^2
+fog <- function(x) {
+  return(f(g(x)))
+}
+
+#' @title g of f
+#' @description (2(x^2)+5)
+#' @param x a number or vector
+#' @return computed value
+gof <- function(x) {
+  return(g(f(x)))
+}
+
+fog(2)     # 81
+fog(-5)    # 25
+
+gof(0)     # 5
+gof(-5/2)  # 17.5
+```
+
+#Your Turn*: Area of a circle
+```{r}
+#' @title area of circle
+#' @description calculates the area of a circle
+#' @param radius radius of a circle, default = 1
+#' @return computed area
+circle_area <- function(radius = 1){
+  if (radius < 0) {
+    stop("radius must be positive")
+  }
+  area = pi*radius^2
+  return(area)
+}
+
+circle_area()
+circle_area(2)
+```
+
+Your Turn*: Surface area of a cylinder
+```{r}
+#' @title surface area of object
+#' @description calculates the surface area of object
+#' @param radius radius of a object, default = 1
+#' @param height height of a object, default = 1
+#' @return computed surface area
+cylinder_area <- function(radius = 1, height = 1){
+  if (radius < 0) {
+    stop("radius must be positive")
+  }
+  if (height < 0) {
+    stop("height must be positive")
+  }
+  area = 2*pi*radius*height + 2*circle_area(radius)
+  return(area)
+}
+
+cylinder_area(2,3)
+cylinder_area(radius = 2, height = 3)
+```
+
+
+#Your Turn*:Volume of a cylinder
+```{r}
+#' @title volume of object
+#' @description calculates the volume of object
+#' @param radius radius of a object, default = 1
+#' @param height heigh of a object, default = 1
+#' @return computed volume
+cylinder_volume <- function(radius = 1, height = 1){
+  if (radius < 0) {
+    stop("radius must be positive")
+  }
+  if (height < 0) {
+    stop("height must be positive")
+  }
+  volume = circle_area(radius) * height
+  return(volume)
+}
+
+cylinder_volume(1,2)
+```
+
+#Your Turn*: Even number
+```{r}
+#' @title Even Number Checker
+#' @description Checks if the values is an even number
+#' @param x a number
+#' @return TRUE or FALSE
+is_even <- function(x){
+  if(!is.numeric(x)){
+    stop("must be numeric")
+  }
+  if(x %% 2 == 0){
+    return(TRUE)
+  }
+  return(FALSE)
+}
+
+# even number
+is_even(10)
+
+# odd number
+is_even(33)
+
+# not a number
+is_even('a')
+```
+
+##Your Turn*: Odd number
+```{r}
+#' @title Odd Number Checker
+#' @description Checks if the values is an odd number
+#' @param x a number
+#' @return TRUE or FALSE
+is_odd <- function(x){
+  if(!is.numeric(x)){
+    stop("must be numeric")
+  }
+  if((x %% 2) != 0){
+    return(TRUE)
+  }
+  return(FALSE)
+}
+
+# odd number
+is_odd(1)
+
+# even number
+is_odd(4)
+
+# not a number
+is_odd('a')
+```
+
+##Your Turn*:Grading function
+```{r}
+#' @title Grader
+#' @description Checks the grade of individual
+#' @param x a number
+#' @return final grade
+grade <- function(score) {
+  if (score >= 90) {
+    return("A")
+  } else if (score < 90 & score >= 80) {
+    return("B")
+  } else if (score < 80  & score >= 70) {
+    return("C")
+  } else if (score < 70 & score >= 60) {
+    return("D")
+  } else if (score < 60) {
+    return("F")
+  }
+}
+
+# grade "A"
+grade(score = 90)
+
+# grade "B"
+grade(score = 89.9999)
+
+# grade "C"
+grade(score = 70.0000001)
+
+# grade "F"
+grade(score = 50)
+```
+
+
+
