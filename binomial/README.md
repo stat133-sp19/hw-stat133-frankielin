@@ -2,15 +2,24 @@
 "binomial" is a minimal R package that allows one to calculate and manipulate data from binomial distributions.
 
 bin_variable() creates a "binvar" object
+
 bin_distribution() creates a "bindis" and "data.frame"
+
 bin_cumulative() creates a "bincum" and "data.frame"
+
 plot() method for "bindis", "bincum", and "binvar" objects. 
+
 summary() method for "binvar" object
 
+
 bin_mean() function for binomial mean calculation
+
 bin_mode() function for binomial mode calculation
+
 bin_varience() function for binomial varience calculation
+
 bin_skewness() function for binomial skewness calculation
+
 bin_kurtosis() function for binomial kurtosis calculation
 
 # Motivation
@@ -21,5 +30,7 @@ Install the development version from GitHub via the package "devtools"
 Thiss can be installed from the author, Frankie Lin at "www.githib.com/frankielin/binomial" (hopefully it should be up there, if not it will be uploaded to the class repository.) 
 
 # Additional notes
+
 Suggested imports: testthat
+
 Require imports: ggplot2
