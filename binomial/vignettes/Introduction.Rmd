@@ -1,0 +1,85 @@
+---
+title: "Getting Started with Binomial"
+author: "Frankie Lin"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting Started with Binomial}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Binomial
+
+The package `"binomial"` is a basic implementation for calculating various values such as mean, mode, probability etc, and a way to visualize the probability of successes within the discrete binomial framework. 
+
+## Loading Package
+```{r}
+library(binomial)
+```
+
+
+## Finding the combinations and probability of binomial distribution
+
+The first step is to understand the ability to calulates the combinations and the probability of a given binomial event. 
+
+```{r}
+# bin_choose function
+bin_choose(n = 10, k = 5)
+
+#bin_probability function
+bin_probability(success = 5, trials = 10, prob = 0.5)
+```
+
+## Binomial distribution
+
+Additionally to just calculating a single event, the package offers a variety of methods of pulling the modifying distribution of a given number of trials. In addition to that, our package allows you to easily plot these distributions. 
+
+```{r}
+# Binomial Distribution
+bin_distribution(10, 0.5)
+
+# Plotting
+plot(bin_distribution(10, 0.5))
+```
+
+Additionally to standard distributions, one can also look at cumulative distributions:
+```{r}
+# Culumlative Distribution
+bin_cumulative(10, 0.5)
+
+# Plotting
+plot(bin_cumulative(10, 0.5))
+```
+
+Moreso, we can print the summary statistics for particuliar binomial probabilitie by defining a binomial variable:
+```{r}
+# defining a binomial variable
+variable <- bin_variable(10, .5)
+
+# Priting general summary
+variable
+
+# Printing longform summary
+var.summary <- summary(variable)
+var.summary
+```
+
+## Misc. Calculations
+
+With this package there are quite a few functions that be used to calculate different values displayed in the summary above. 
+```{r}
+bin_mean(10, 0.5)
+bin_variance(10, 0.5)
+bin_mode(10, 0.5)
+bin_kurtosis(10, 0.5)
+bin_skewness(10, 0.5)
+```
+

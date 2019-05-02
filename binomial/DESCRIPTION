@@ -1,0 +1,22 @@
+Package: binomial
+Title: An Implementation of Binomial Distributions
+Version: 0.0.0.9000
+Authors@R: person("Frankie", "Lin", email = "frankie.lin@berkeley.edu", role = c("aut", "cre"))
+Description: This package puts together the core components to calculate the binomial distribution. Combining multiple functions circling around
+    the binomial distribution. The Binomial distribution is perhaps the most famous probability distribution among discrete random variables. Within
+    this package we implement functions to calculate both the standard and cumulative distributions for the binomial distribution. Moreso, the package 
+    contains a few methods by which to produce plots and summaries for the distribution. This package simplified to process to extract and analyzing the 
+    binomial distribution. In this package we have a variety of main functions. These functions include: binomial distribution, binomial cumulative, binomial 
+    probability, etc. Ultimately, this package simplifies the usage of binomial functions for analysis. 
+Depends: R (>= 3.5.1)
+License: GPL-2
+Encoding: UTF-8
+LazyData: true
+Suggests: 
+    testthat,
+    knitr,
+    rmarkdown
+Imports: 
+    ggplot2
+RoxygenNote: 6.1.1
+VignetteBuilder: knitr

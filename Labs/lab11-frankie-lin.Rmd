@@ -1,0 +1,135 @@
+---
+title: "Lab 11"
+author: "Frankie Lin"
+date: "4/18/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(curl)
+library(tidyverse)
+data <- read.csv(curl('https://raw.githubusercontent.com/ucb-stat133/stat133-labs/master/data/text-emotion.csv'))
+```
+
+#1) Number of characters per tweet*
+```{r}
+data <-
+  data %>%
+  mutate(content = as.character(content),
+         author = as.character(author))
+
+#Count the number of characters
+summary(nchar(x = data$content))
+
+#Display the summary() of the vector obtained above.
+summary(nchar(x = data$content))
+
+#Likewise, graph a histogram of these counts. To plot the histogram, use a bin width of 5 units: 1-5, 6-10, 11-15, 16-20, etc. In other words: the first bin involves tweets between 1 and 5 characters (inclusive), the second bin involves tweets containing between 6 and 10 characters (inclusive), and so on.
+hist(nchar(x = data$content), breaks = seq(1,175, by = 5))
+
+#Are there any tweets with 0 characters? (write a command that answers this question).
+sum(nchar(x = data$content) == 0) > 0
+
+#Are there any tweets with 1 character? If yes (write commands that answer these questions):
+sum(nchar(x = data$content) == 1) > 0
+
+#how many?
+sum(nchar(x = data$content) == 1)
+
+#what is their content?
+data$content[(nchar(x = data$content) == 1)]
+
+#what is their location (i.e. index or position)?
+(1:length(data$content))[(nchar(x = data$content) == 1)]
+
+#What is the tweet with the most characters (i.e. max length)? (write a command that answers these questions).
+data$content[which.max(nchar(x = data$content))]
+
+#the number of characters
+nchar(x = data$content)[which.max(nchar(x = data$content))]
+
+#display its content
+data$content[which.max(nchar(x = data$content))]
+
+#Display location
+which.max(nchar(x = data$content))
+
+
+```
+
+#2) Author (usernames)*
+```{r}
+authorchar <- nchar(data$author)
+
+# No longer than 15 characters (if you find usernames longer than 15 characters, display them)
+which(authorchar > 15)
+
+# Contain alphanumeric characters and underscores. If you find usernames containing other symbols, display them. Hint: The non-word character class is "\\W" is your friend.
+data$author[str_detect(data$author, "\\W")]
+
+# What is the number of characters of the shortest usernames? And what are the names of these authors? (write commands to answer these questions)
+data$author[authorchar == min(authorchar)]
+
+```
+
+#3) Various Symbols and Strings*
+```{r}
+library(stringr)
+#How many tweets contain at least one caret symbol "^" (write a command to answer this question).
+sum(str_detect(data$content, "\\^"))
+
+#How many tweets contain three or more consecutive dollar symbols "$" (write a command to answer this question).
+sum(str_detect(data$content, "\\${3}"))
+
+#How many tweets do NOT contain the characters "a" or "A" (write a command to answer this question).
+sum(!str_detect(data$content, "[aA]"))
+
+#Display the first 10 elements of the tweets that do NOT contain the characters "a" or "A" (write a command to answer this question).
+head(data$content[!str_detect(data$content, "[aA]")], 5)
+
+#Number of exclamation symbols "!": compute a vector with the number of exclamation symbols in each tweet, and display its summary().
+exclaim_num <- str_count(data$content, "!")
+summary(exclaim_num)
+
+#What’s the tweet (content) with the largest number of exclamation symbols !? Display its content. (write a command to answer this question)
+data$content[which.max(exclaim_num)]
+```
+
+# 4) Sentiment*
+```{r}
+#What are the different types of sentiments (i.e. categories)? (write a command that answers this question)
+unique(data$sentiment)
+
+#Compute the frequencies (i.e. counts) of each sentiment (and display these frequencies).
+table(data$sentiment)
+
+#Graph the relative frequencies (i.e. proportions) with a horizontal barplot (bars horizontally oriented) in decreasing order, including names of sentiment types.
+
+plot.dat <- 
+  data %>%
+  group_by(sentiment) %>%
+  summarize(freq = n()/nrow(data))
+
+
+ggplot(data = plot.dat, aes(x = reorder(sentiment, -freq), y = freq)) +
+  geom_bar(stat = "identity") + 
+  coord_flip()
+  
+
+#Sentiment and length of tweets: compute a table with the average length of characters per sentiment (i.e. average number of characters for neutral tweets, for happy tweets, etc.). Display this table.
+tab <- 
+  data %>%
+  group_by(sentiment) %>%
+  summarize(average_char = mean(nchar(content)))
+
+tab
+
+```
+
+
+
+
